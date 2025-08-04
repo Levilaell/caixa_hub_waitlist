@@ -1,0 +1,123 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Waitlist {
+  id           String   @id @default(uuid())
+  email        String   @unique
+  fullName     String   @map("full_name")
+  companyName  String   @map("company_name")
+  companySize  CompanySize @map("company_size")
+  phone        String?
+  cnpj         String?
+  monthlyRevenue String? @map("monthly_revenue")
+  mainBank     String?  @map("main_bank")
+  
+  // Tracking
+  referralSource String? @map("referral_source")
+  utmSource      String? @map("utm_source")
+  utmMedium      String? @map("utm_medium")
+  utmCampaign    String? @map("utm_campaign")
+  utmContent     String? @map("utm_content")
+  utmTerm        String? @map("utm_term")
+  
+  // Status
+  status         WaitlistStatus @default(PENDING)
+  priorityScore  Int           @default(0) @map("priority_score")
+  
+  // Engagement
+  emailVerified     Boolean   @default(false) @map("email_verified")
+  verificationToken String?   @unique @map("verification_token")
+  verificationSentAt DateTime? @map("verification_sent_at")
+  lastEmailSentAt   DateTime? @map("last_email_sent_at")
+  emailOpenCount    Int       @default(0) @map("email_open_count")
+  emailClickCount   Int       @default(0) @map("email_click_count")
+  
+  // Consent (LGPD)
+  marketingConsent      Boolean   @default(false) @map("marketing_consent")
+  privacyPolicyAccepted Boolean   @map("privacy_policy_accepted")
+  termsAccepted         Boolean   @map("terms_accepted")
+  consentIp             String?   @map("consent_ip")
+  consentTimestamp      DateTime? @map("consent_timestamp")
+  
+  // Metadata
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  invitedAt   DateTime? @map("invited_at")
+  convertedAt DateTime? @map("converted_at")
+  
+  // A/B Testing
+  variantGroup    String? @map("variant_group")
+  conversionPath  Json?   @map("conversion_path")
+  
+  // Relations
+  events WaitlistEvent[]
+  
+  @@index([email])
+  @@index([status])
+  @@index([createdAt(sort: Desc)])
+  @@index([priorityScore(sort: Desc)])
+  @@map("waitlist")
+}
+
+model WaitlistEvent {
+  id         String   @id @default(uuid())
+  waitlistId String   @map("waitlist_id")
+  waitlist   Waitlist @relation(fields: [waitlistId], references: [id])
+  eventType  String   @map("event_type")
+  eventData  Json?    @map("event_data")
+  createdAt  DateTime @default(now()) @map("created_at")
+  
+  @@index([waitlistId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("waitlist_events")
+}
+
+model EmailCampaign {
+  id             String   @id @default(uuid())
+  name           String
+  subject        String
+  templateId     String   @map("template_id")
+  status         CampaignStatus @default(DRAFT)
+  scheduledFor   DateTime? @map("scheduled_for")
+  sentAt         DateTime? @map("sent_at")
+  
+  // Metrics
+  totalRecipients Int @default(0) @map("total_recipients")
+  sentCount       Int @default(0) @map("sent_count")
+  openCount       Int @default(0) @map("open_count")
+  clickCount      Int @default(0) @map("click_count")
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  @@map("email_campaigns")
+}
+
+enum CompanySize {
+  MICRO  @map("micro")
+  SMALL  @map("small")
+  MEDIUM @map("medium")
+}
+
+enum WaitlistStatus {
+  PENDING   @map("pending")
+  CONFIRMED @map("confirmed")
+  INVITED   @map("invited")
+  CONVERTED @map("converted")
+}
+
+enum CampaignStatus {
+  DRAFT     @map("draft")
+  SCHEDULED @map("scheduled")
+  SENT      @map("sent")
+}
