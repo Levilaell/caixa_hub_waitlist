@@ -40,24 +40,42 @@ export default function WaitlistPage() {
     formState: { errors },
     setValue,
     watch,
+    getValues,
   } = useForm<WaitlistFormData>({
     resolver: zodResolver(waitlistSchema),
+    defaultValues: {
+      marketingConsent: false,
+    },
   })
 
   const onSubmit = async (data: WaitlistFormData) => {
     setIsSubmitting(true)
     
     try {
+      // Clean up phone field - send undefined instead of empty string
+      const cleanedData = {
+        ...data,
+        phone: data.phone?.trim() || undefined,
+        monthlyRevenue: data.monthlyRevenue || undefined,
+        mainBank: data.mainBank || undefined,
+      }
+      
+      // Handle UTM parameters - convert null to undefined
+      const params = new URLSearchParams(window.location.search)
+      const payload = {
+        ...cleanedData,
+        referralSource: params.get('ref') || 'direct',
+        utmSource: params.get('utm_source') || undefined,
+        utmMedium: params.get('utm_medium') || undefined,
+        utmCampaign: params.get('utm_campaign') || undefined,
+      }
+      
+      console.log('Sending payload:', payload)
+      
       const response = await fetch('/api/waitlist/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...data,
-          referralSource: new URLSearchParams(window.location.search).get('ref') || 'direct',
-          utmSource: new URLSearchParams(window.location.search).get('utm_source'),
-          utmMedium: new URLSearchParams(window.location.search).get('utm_medium'),
-          utmCampaign: new URLSearchParams(window.location.search).get('utm_campaign'),
-        }),
+        body: JSON.stringify(payload),
       })
 
       const result = await response.json()
@@ -84,9 +102,14 @@ export default function WaitlistPage() {
           })
         }
       } else {
+        console.error('Validation errors:', result.details)
+        const errorMessage = result.details && Array.isArray(result.details) 
+          ? result.details.map((err: any) => `${err.path?.join('.')}: ${err.message}`).join(', ')
+          : result.message || 'Tente novamente mais tarde'
+        
         toast({
           title: 'Erro ao cadastrar',
-          description: result.message || 'Tente novamente mais tarde',
+          description: errorMessage,
           variant: 'destructive',
         })
       }
@@ -103,11 +126,6 @@ export default function WaitlistPage() {
 
   const features = [
     {
-      icon: Shield,
-      title: 'Segurança Bancária',
-      description: 'Certificado pelo Banco Central com criptografia de nível militar',
-    },
-    {
       icon: Clock,
       title: 'Economize 15h/mês',
       description: 'Automatize tarefas repetitivas e foque no crescimento',
@@ -121,6 +139,11 @@ export default function WaitlistPage() {
       icon: Users,
       title: 'Relatórios Inteligentes',
       description: 'Dashboards personalizados com insights acionáveis para seu negócio',
+    },
+    {
+      icon: Shield,
+      title: 'Segurança Bancária',
+      description: 'Certificado pelo Banco Central com criptografia de nível militar',
     },
   ]
 
@@ -160,20 +183,12 @@ export default function WaitlistPage() {
           )}
           
           <p className="text-gray-600 mb-8">
-            Verifique seu email para confirmar seu cadastro. Em breve você receberá novidades exclusivas sobre o CaixaHub.
           </p>
           
           <div className="space-y-4">
-            <Button
-              onClick={() => window.location.href = 'https://caixahub.com.br'}
-              variant="outline"
-              className="w-full"
-            >
-              Voltar ao site principal
-            </Button>
+
             
             <div className="text-sm text-gray-500">
-              Compartilhe com amigos e suba na fila!
             </div>
             
             <div className="flex justify-center space-x-4">
@@ -324,7 +339,14 @@ export default function WaitlistPage() {
 
                   <div>
                     <Label htmlFor="companySize">Tamanho da empresa *</Label>
-                    <Select onValueChange={(value) => setValue('companySize', value as any)}>
+                    <input
+                      type="hidden"
+                      {...register('companySize')}
+                    />
+                    <Select 
+                      onValueChange={(value) => setValue('companySize', value as 'micro' | 'small' | 'medium', { shouldValidate: true, shouldDirty: true })}
+                      value={watch('companySize')}
+                    >
                       <SelectTrigger className={errors.companySize ? 'border-red-500' : ''}>
                         <SelectValue placeholder="Selecione" />
                       </SelectTrigger>
@@ -413,7 +435,7 @@ export default function WaitlistPage() {
                     </div>
                   ) : (
                     <div className="flex items-center justify-center">
-                      Garantir meu acesso antecipado
+                      Garantir meu acesso
                       <ArrowRight className="ml-2 h-5 w-5" />
                     </div>
                   )}

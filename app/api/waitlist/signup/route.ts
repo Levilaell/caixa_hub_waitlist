@@ -92,11 +92,14 @@ export async function POST(request: NextRequest) {
       throw insertError
     }
 
-    // Get position in waitlist
+    // Get position in waitlist (starting from 77)
     const { count } = await supabase
       .from('waitlist')
       .select('*', { count: 'exact', head: true })
       .lte('created_at', waitlistEntry.created_at)
+    
+    // Add 76 to start counting from 77
+    const adjustedPosition = (count || 1) + 76
 
     // Send welcome email
     const verificationUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/waitlist/verify?token=${verificationToken}`
@@ -129,7 +132,7 @@ export async function POST(request: NextRequest) {
             <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 20px 0;">
               <p style="margin: 0; color: #374151; text-align: center;">
                 <strong>Sua posição na fila:</strong><br>
-                <span style="font-size: 36px; color: #10b981; font-weight: bold;">#${count || 1}</span>
+                <span style="font-size: 36px; color: #10b981; font-weight: bold;">#${adjustedPosition}</span>
               </p>
             </div>
             
@@ -197,7 +200,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      position: count || 1,
+      position: adjustedPosition,
       message: 'Cadastro realizado com sucesso! Verifique seu email.',
     })
 
