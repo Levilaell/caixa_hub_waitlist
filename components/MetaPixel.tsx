@@ -1,5 +1,16 @@
 'use client'
 
+/**
+ * Meta Pixel Component
+ * 
+ * Este componente gerencia a integração do Meta (Facebook) Pixel.
+ * 
+ * Correções aplicadas:
+ * - Resolvido problema de duplicação de PageView removendo o disparo inicial do onload
+ * - PageView agora é disparado apenas pelo useEffect que monitora rotas
+ * - Garantido que o pixel seja inicializado apenas uma vez
+ */
+
 import { useEffect, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
@@ -48,7 +59,7 @@ function MetaPixelInner() {
       script.onload = () => {
         // Inicializa o pixel apenas após o script carregar
         window.fbq('init', PIXEL_ID)
-        window.fbq('track', 'PageView')
+        // PageView será disparado pelo useEffect de tracking de rotas
       }
       
       const firstScript = document.getElementsByTagName('script')[0]
@@ -74,10 +85,25 @@ function MetaPixelInner() {
     }
   }, []) // Array vazio garante execução única
 
-  // Rastreia mudanças de página (SPA)
+  // Rastreia PageView inicial e mudanças de página (SPA)
   useEffect(() => {
-    if (window.fbq && window.FB_PIXEL_INITIALIZED) {
-      window.fbq('track', 'PageView')
+    // Aguarda o pixel estar completamente inicializado
+    const checkAndTrack = () => {
+      if (window.fbq && window.FB_PIXEL_INITIALIZED) {
+        window.fbq('track', 'PageView')
+        return true
+      }
+      return false
+    }
+    
+    // Tenta imediatamente
+    if (!checkAndTrack()) {
+      // Se não conseguiu, tenta novamente após um pequeno delay
+      const timer = setTimeout(() => {
+        checkAndTrack()
+      }, 100)
+      
+      return () => clearTimeout(timer)
     }
   }, [pathname, searchParams])
 
