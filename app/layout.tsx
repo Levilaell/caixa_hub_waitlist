@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import Script from 'next/script'
 import './globals.css'
 import { Toaster } from '@/components/ui/toaster'
 
@@ -87,8 +88,15 @@ export default function RootLayout({
           />
         )}
 
+      </head>
+      <body className={inter.className}>
+        {children}
+        <Toaster />
+        
         {/* Meta Pixel Code */}
-        <script
+        <Script
+          id="fb-pixel"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
               !function(f,b,e,v,n,t,s)
@@ -113,11 +121,6 @@ export default function RootLayout({
             alt=""
           />
         </noscript>
-        {/* End Meta Pixel Code */}
-      </head>
-      <body className={inter.className}>
-        {children}
-        <Toaster />
       </body>
     </html>
   )
