@@ -90,7 +90,7 @@ export default function WaitlistPage() {
           particleCount: 100,
           spread: 70,
           origin: { y: 0.6 },
-          colors: ['#10b981', '#3b82f6', '#8b5cf6'],
+          colors: ['#a855f7', '#ec4899', '#7c3aed'],
         })
 
         // Track conversion
@@ -156,7 +156,7 @@ export default function WaitlistPage() {
 
   if (isSuccess) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -166,29 +166,29 @@ export default function WaitlistPage() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{ delay: 0.2, type: 'spring' }}
-            className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6"
+            className="w-20 h-20 bg-purple-900/20 rounded-full flex items-center justify-center mx-auto mb-6"
           >
-            <CheckCircle className="w-10 h-10 text-emerald-600" />
+            <CheckCircle className="w-10 h-10 text-primary" />
           </motion.div>
           
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl font-bold text-foreground mb-4">
             Você está na lista! 🎉
           </h2>
           
           {position && (
-            <div className="bg-gradient-to-r from-emerald-500 to-blue-600 text-white rounded-lg p-4 mb-6">
+            <div className="bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-lg p-4 mb-6">
               <p className="text-sm opacity-90">Sua posição na fila</p>
               <p className="text-4xl font-bold">#{position}</p>
             </div>
           )}
           
-          <p className="text-gray-600 mb-8">
+          <p className="text-muted-foreground mb-8">
           </p>
           
           <div className="space-y-4">
 
             
-            <div className="text-sm text-gray-500">
+            <div className="text-sm text-muted-foreground">
             </div>
             
             <div className="flex justify-center space-x-4">
@@ -211,7 +211,7 @@ export default function WaitlistPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-white to-blue-50">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-grid-pattern opacity-5" />
@@ -222,35 +222,35 @@ export default function WaitlistPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-4xl mx-auto"
           >
-            <div className="inline-flex items-center bg-emerald-100 text-emerald-800 rounded-full px-4 py-2 text-sm font-medium mb-6">
+            <div className="inline-flex items-center bg-primary/10 text-primary rounded-full px-4 py-2 text-sm font-medium mb-6">
               <Sparkles className="w-4 h-4 mr-2" />
               Lançamento em breve • Lista de espera aberta
             </div>
             
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-5xl md:text-6xl font-bold text-foreground mb-6 leading-tight">
               O sistema financeiro que{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-blue-600">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600">
                 funciona sozinho
               </span>
             </h1>
             
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+            <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
               Conecte seus bancos em 5 minutos. Nossa IA organiza tudo automaticamente, 
               categoriza despesas e ainda te ajuda a tomar decisões melhores. 
               Sem planilhas, sem trabalho manual.
             </p>
             
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-gray-500 mb-12">
+            <div className="flex flex-wrap justify-center gap-4 text-sm text-muted-foreground mb-12">
               <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 text-emerald-600 mr-2" />
+                <CheckCircle className="w-4 h-4 text-primary mr-2" />
                 Grátis para testar
               </div>
               <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 text-emerald-600 mr-2" />
+                <CheckCircle className="w-4 h-4 text-primary mr-2" />
                 Sem cartão de crédito
               </div>
               <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 text-emerald-600 mr-2" />
+                <CheckCircle className="w-4 h-4 text-primary mr-2" />
                 LGPD compliant
               </div>
             </div>
@@ -265,8 +265,8 @@ export default function WaitlistPage() {
                   transition={{ delay: 0.2 }}
                   className="text-center"
                 >
-                  <div className="text-3xl font-bold text-gray-900">{stat.value}</div>
-                  <div className="text-sm text-gray-500">{stat.label}</div>
+                  <div className="text-3xl font-bold text-foreground">{stat.value}</div>
+                  <div className="text-sm text-muted-foreground">{stat.label}</div>
                 </motion.div>
               ))}
             </div>
@@ -283,12 +283,12 @@ export default function WaitlistPage() {
             transition={{ delay: 0.3 }}
             className="max-w-2xl mx-auto"
           >
-            <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12">
+            <div className="bg-card rounded-2xl shadow-xl border border-border p-8 md:p-12">
               <div className="text-center mb-8">
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                <h2 className="text-3xl font-bold text-foreground mb-2">
                   Entre na lista de espera
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-muted-foreground">
                   Seja um dos primeiros a revolucionar sua gestão financeira
                 </p>
               </div>
@@ -417,7 +417,7 @@ export default function WaitlistPage() {
                       id="marketing"
                       onCheckedChange={(checked) => setValue('marketingConsent', checked as boolean)}
                     />
-                    <Label htmlFor="marketing" className="text-sm text-gray-600 cursor-pointer">
+                    <Label htmlFor="marketing" className="text-sm text-muted-foreground cursor-pointer">
                       Quero receber novidades e ofertas exclusivas do CaixaHub
                     </Label>
                   </div>
@@ -426,7 +426,7 @@ export default function WaitlistPage() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-12 text-lg bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700"
+                  className="w-full h-12 text-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
                 >
                   {isSubmitting ? (
                     <div className="flex items-center">
@@ -441,7 +441,7 @@ export default function WaitlistPage() {
                   )}
                 </Button>
 
-                <p className="text-center text-sm text-gray-500">
+                <p className="text-center text-sm text-muted-foreground">
                   Ao se cadastrar, você concorda em receber um email de confirmação
                 </p>
               </form>
@@ -451,13 +451,13 @@ export default function WaitlistPage() {
       </section>
 
       {/* Features Section */}
-      <section className="py-20 bg-gray-50">
+      <section className="py-20 bg-background/50">
         <div className="container mx-auto px-4">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl font-bold text-foreground mb-4">
               Por que o CaixaHub é diferente?
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Enquanto outros sistemas exigem horas de configuração e treinamento, 
               o CaixaHub funciona sozinho desde o primeiro minuto
             </p>
@@ -471,13 +471,13 @@ export default function WaitlistPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+                className="bg-card rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow border border-border"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-100 to-blue-100 rounded-lg flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-emerald-600" />
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-900/20 to-pink-900/20 rounded-lg flex items-center justify-center mb-4">
+                  <feature.icon className="w-6 h-6 text-primary" />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -485,18 +485,21 @@ export default function WaitlistPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-emerald-600 to-blue-600 text-white">
-        <div className="container mx-auto px-4 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+      <section className="relative py-20 bg-card overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-transparent to-pink-900/20" />
+        <div className="absolute inset-0 bg-grid-pattern opacity-5" />
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-foreground">
             Não perca a chance de transformar sua gestão financeira
           </h2>
-          <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto">
+          <p className="text-xl opacity-90 mb-8 max-w-2xl mx-auto text-muted-foreground">
+            Entre agora na lista de espera e garanta condições exclusivas
           </p>
           <Button
             size="lg"
-            variant="secondary"
+            variant="default"
             onClick={() => document.getElementById('fullName')?.focus()}
-            className="h-12 px-8"
+            className="h-12 px-8 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-0"
           >
             Quero meu desconto exclusivo
             <ArrowRight className="ml-2 h-5 w-5" />
@@ -505,11 +508,11 @@ export default function WaitlistPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-gray-400 py-12">
+      <footer className="bg-black/90 text-muted-foreground py-12">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center mb-4 md:mb-0">
-              <Building className="h-8 w-8 text-emerald-500 mr-2" />
+              <Building className="h-8 w-8 text-primary mr-2" />
               <span className="text-xl font-bold text-white">CaixaHub</span>
             </div>
             
@@ -526,7 +529,7 @@ export default function WaitlistPage() {
             </div>
           </div>
           
-          <div className="mt-8 pt-8 border-t border-gray-800 text-center text-sm">
+          <div className="mt-8 pt-8 border-t border-border text-center text-sm">
             © 2025 CaixaHub. Todos os direitos reservados.
           </div>
         </div>
