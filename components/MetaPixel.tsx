@@ -1,0 +1,84 @@
+'use client'
+
+import { useEffect } from 'react'
+import { usePathname, useSearchParams } from 'next/navigation'
+
+declare global {
+  interface Window {
+    fbq: any
+    _fbq: any
+    FB_PIXEL_INITIALIZED: boolean
+  }
+}
+
+const PIXEL_ID = '24169428459391565'
+
+export default function MetaPixel() {
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  useEffect(() => {
+    // Previne inicialização múltipla com flag dedicada
+    if (window.FB_PIXEL_INITIALIZED) {
+      return
+    }
+
+    // Marca como inicializado ANTES de carregar o script
+    window.FB_PIXEL_INITIALIZED = true
+
+    // Função de inicialização do pixel
+    const initPixel = () => {
+      if (window.fbq) return
+      
+      const n = (window.fbq = function() {
+        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      })
+      
+      if (!window._fbq) window._fbq = n
+      n.push = n
+      n.loaded = true
+      n.version = '2.0'
+      n.queue = []
+      
+      const script = document.createElement('script')
+      script.async = true
+      script.src = 'https://connect.facebook.net/en_US/fbevents.js'
+      
+      script.onload = () => {
+        // Inicializa o pixel apenas após o script carregar
+        window.fbq('init', PIXEL_ID)
+        window.fbq('track', 'PageView')
+      }
+      
+      const firstScript = document.getElementsByTagName('script')[0]
+      firstScript.parentNode?.insertBefore(script, firstScript)
+    }
+
+    // Inicializa o pixel
+    initPixel()
+
+    // Adiciona noscript fallback
+    const noscript = document.createElement('noscript')
+    const img = document.createElement('img')
+    img.height = 1
+    img.width = 1
+    img.style.display = 'none'
+    img.src = `https://www.facebook.com/tr?id=${PIXEL_ID}&ev=PageView&noscript=1`
+    noscript.appendChild(img)
+    document.body.appendChild(noscript)
+
+    // Cleanup function
+    return () => {
+      // Mantém a flag para prevenir re-inicialização
+    }
+  }, []) // Array vazio garante execução única
+
+  // Rastreia mudanças de página (SPA)
+  useEffect(() => {
+    if (window.fbq && window.FB_PIXEL_INITIALIZED) {
+      window.fbq('track', 'PageView')
+    }
+  }, [pathname, searchParams])
+
+  return null
+}

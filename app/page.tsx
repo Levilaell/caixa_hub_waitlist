@@ -93,12 +93,22 @@ export default function WaitlistPage() {
           colors: ['#a855f7', '#ec4899', '#7c3aed'],
         })
 
-        // Track conversion
+        // Track conversion - Google Analytics
         if (typeof window !== 'undefined' && (window as any).gtag) {
           (window as any).gtag('event', 'waitlist_signup', {
             company_size: data.companySize,
             has_phone: !!data.phone,
             marketing_consent: data.marketingConsent,
+          })
+        }
+        
+        // Track conversion - Meta Pixel
+        if (typeof window !== 'undefined' && (window as any).fbq) {
+          (window as any).fbq('track', 'Lead', {
+            content_name: 'Waitlist Signup',
+            content_category: 'B2B Software',
+            value: data.companySize === 'medium' ? 100 : data.companySize === 'small' ? 50 : 25,
+            currency: 'BRL',
           })
         }
       } else {
