@@ -88,11 +88,6 @@ export default function RootLayout({
           />
         )}
 
-      </head>
-      <body className={inter.className}>
-        {children}
-        <Toaster />
-        
         {/* Meta Pixel Code */}
         <Script
           id="fb-pixel"
@@ -114,6 +109,10 @@ export default function RootLayout({
             `,
           }}
         />
+      </head>
+      <body className={inter.className}>
+        {children}
+        <Toaster />
         <noscript>
           <img 
             height="1" 
