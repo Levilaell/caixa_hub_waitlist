@@ -181,7 +181,7 @@ export default function WaitlistPage() {
             <CheckCircle className="w-10 h-10 text-primary" />
           </motion.div>
           
-          <h2 className="text-3xl font-bold text-foreground mb-4">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4">
             Você está na lista! 🎉
           </h2>
           
@@ -192,13 +192,15 @@ export default function WaitlistPage() {
             </div>
           )}
           
-          <p className="text-muted-foreground mb-8">
+          <p className="text-gray-600 mb-8">
+            Você receberá um email com as próximas instruções em breve.
           </p>
           
           <div className="space-y-4">
 
             
-            <div className="text-sm text-muted-foreground">
+            <div className="text-sm text-gray-600">
+              Compartilhe com seus amigos e suba na fila!
             </div>
             
             <div className="flex justify-center space-x-4">
