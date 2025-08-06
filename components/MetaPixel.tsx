@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, Suspense } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
 declare global {
@@ -13,7 +13,7 @@ declare global {
 
 const PIXEL_ID = '24169428459391565'
 
-export default function MetaPixel() {
+function MetaPixelInner() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
@@ -30,7 +30,8 @@ export default function MetaPixel() {
     const initPixel = () => {
       if (window.fbq) return
       
-      const n = (window.fbq = function() {
+      const n: any = (window.fbq = function() {
+        // @ts-ignore
         n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
       })
       
@@ -81,4 +82,12 @@ export default function MetaPixel() {
   }, [pathname, searchParams])
 
   return null
+}
+
+export default function MetaPixel() {
+  return (
+    <Suspense fallback={null}>
+      <MetaPixelInner />
+    </Suspense>
+  )
 }
